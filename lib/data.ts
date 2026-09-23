@@ -4,7 +4,6 @@ export const CONTACT = {
   phoneDisplay: "+91 6397733545",
   phoneHref: "tel:+916397733545",
   whatsapp: "https://wa.me/916397733545",
-  formEndpoint: "https://formsubmit.co/ajax/aruns261123@gmail.com",
   location: "India",
   linkedin: "https://linkedin.com/in/arun-saini-419a60320",
   github: "https://github.com/aruns261123-ship-it",

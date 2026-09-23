@@ -18,13 +18,7 @@ import {
   SpinnerIcon,
 } from "./icons";
 
-const FORMSUBMIT_FIELDS = {
-  _subject: "New portfolio contact — arunsaini.dev",
-  _template: "table",
-  _captcha: "false",
-} as const;
-
-type Status = "idle" | "submitting" | "success" | "error" | "setup";
+type Status = "idle" | "submitting" | "success" | "error";
 
 type FieldErrors = Partial<Record<"name" | "email" | "subject" | "message" | "company", string>>;
 
@@ -62,6 +56,7 @@ export function Contact() {
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (status === "submitting") return; // guard against duplicate submissions
     const next = validate(values);
     setErrors(next);
     if (Object.keys(next).length > 0) {
@@ -71,42 +66,39 @@ export function Contact() {
       return;
     }
     setStatus("submitting");
-    // Delivered by FormSubmit (free tier, no signup): the submission is
-    // POSTed server-side and emailed straight to Arun's Gmail inbox —
-    // no visitor mail client involved. The honeypot field stays empty;
-    // bots that fill it are silently rejected.
+    // Posted to the site's own API route (app/api/contact), which validates
+    // and sends the notification email server-side through Resend. The API
+    // key never reaches the browser.
     try {
-      const res = await fetch(CONTACT.formEndpoint, {
+      const res = await fetch("/api/contact", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          ...FORMSUBMIT_FIELDS,
-          name: values.name.trim(),
-          email: values.email.trim(),
-          subject: values.subject.trim(),
-          message: values.message.trim(),
-          _replyto: values.email.trim(),
+          name: values.name,
+          email: values.email,
+          subject: values.subject,
+          message: values.message,
+          company: values.company,
         }),
       });
-      const data: { success?: string | boolean; message?: string } = await res
+      const data: { ok?: boolean; errors?: FieldErrors } = await res
         .json()
         .catch(() => ({}));
-      const delivered =
-        res.ok && data.success !== "false" && data.success !== false;
-      if (!delivered) {
-        // FormSubmit replies with an activation notice until the form owner
-        // clicks the one-time activation link emailed to the inbox.
-        const pendingActivation =
-          typeof data.message === "string" && /activation/i.test(data.message);
-        throw new Error(pendingActivation ? "setup" : "delivery");
+      if (res.ok && data.ok) {
+        setStatus("success");
+        setValues({ name: "", email: "", subject: "", message: "", company: "" });
+        return;
       }
-      setStatus("success");
-      setValues({ name: "", email: "", subject: "", message: "", company: "" });
-    } catch (err) {
-      setStatus(err instanceof Error && err.message === "setup" ? "setup" : "error");
+      if (res.status === 400 && data.errors) {
+        setErrors(data.errors);
+        const first = Object.keys(data.errors)[0];
+        document.querySelector<HTMLElement>(`[name="${first}"]`)?.focus();
+        setStatus("idle");
+        return;
+      }
+      setStatus("error");
+    } catch {
+      setStatus("error");
     }
   }
 
@@ -387,7 +379,7 @@ export function Contact() {
                 {status === "submitting" ? (
                   <>
                     <SpinnerIcon className="h-4 w-4" />
-                    Sending…
+                    Sending...
                   </>
                 ) : (
                   <>
@@ -401,24 +393,14 @@ export function Contact() {
                 {status === "success" ? (
                   <p className="mt-5 flex items-start gap-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-[13.5px] text-emerald-300">
                     <CheckIcon className="mt-0.5 h-4 w-4 shrink-0" />
-                    Message sent — it has landed straight in my inbox. I&apos;ll
-                    get back to you at the email you provided. Need a faster
-                    reply? Message me on WhatsApp beside this form.
+                    Message sent successfully! I&apos;ll get back to you soon.
                   </p>
                 ) : null}
                 {status === "error" ? (
                   <p className="mt-5 flex items-start gap-2.5 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-[13.5px] text-red-300">
                     <AlertIcon className="mt-0.5 h-4 w-4 shrink-0" />
-                    Something went wrong sending your message. Please email me
-                    directly at {CONTACT.email} or WhatsApp {CONTACT.phoneDisplay}.
-                  </p>
-                ) : null}
-                {status === "setup" ? (
-                  <p className="mt-5 flex items-start gap-2.5 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-[13.5px] text-amber-300">
-                    <AlertIcon className="mt-0.5 h-4 w-4 shrink-0" />
-                    The contact form is being set up and will be back shortly.
-                    For an instant reply, WhatsApp me at {CONTACT.phoneDisplay} or
-                    email {CONTACT.email}.
+                    Unable to send your message right now. Please try again or
+                    contact me directly by email.
                   </p>
                 ) : null}
               </div>
