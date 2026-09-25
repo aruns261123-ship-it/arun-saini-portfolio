@@ -12,10 +12,11 @@ export const CONTACT = {
 export const NAV_ITEMS = [
   { label: "Home", href: "#home" },
   { label: "About", href: "#about" },
+  { label: "Services", href: "#services" },
   { label: "Experience", href: "#experience" },
   { label: "Projects", href: "#projects" },
+  { label: "SEO Tool", href: "#seo-tool" },
   { label: "Skills", href: "#skills" },
-  { label: "Education", href: "#education" },
   { label: "Contact", href: "#contact" },
 ] as const;
 
@@ -48,6 +49,88 @@ export const PROFILE_CARD = [
   { label: "Also", value: "Frontend Development" },
   { label: "Education", value: "BCA Graduate — 2025" },
   { label: "Location", value: "India" },
+] as const;
+
+export type Service = {
+  id: string;
+  icon: "search" | "code" | "globe" | "zap";
+  badge: string;
+  title: string;
+  tagline: string;
+  description: string;
+  deliverables: string[];
+  tools: string[];
+};
+
+export const SERVICES: Service[] = [
+  {
+    id: "technical-seo",
+    icon: "search",
+    badge: "Core Focus",
+    title: "Technical SEO Audits & Health",
+    tagline: "Fix the crawl, speed, and architecture issues stopping Google from indexing your site.",
+    description:
+      "Deep technical audits to diagnose and resolve crawl bottlenecks, indexing issues, and core architecture flaws. I ensure search engine bots can discover, render, and index your high-value pages effortlessly.",
+    deliverables: [
+      "Full crawl audit (Screaming Frog, Sitebulb)",
+      "Robots.txt, XML sitemaps & crawl budget optimization",
+      "Core Web Vitals & mobile page-speed optimization",
+      "Canonicalization, redirect chains & 404 cleanup",
+      "Structured data implementation (Schema.org / JSON-LD)",
+    ],
+    tools: ["Screaming Frog", "Google Search Console", "Lighthouse"],
+  },
+  {
+    id: "on-page-strategy",
+    icon: "zap",
+    badge: "Traffic Growth",
+    title: "On-Page & Keyword Strategy",
+    tagline: "Target high-intent keywords that bring actual customers, not just vanity clicks.",
+    description:
+      "Strategic keyword research and content optimization mapped directly to search intent. I optimize titles, metadata, heading hierarchies, and internal link structures so your content dominates target queries.",
+    deliverables: [
+      "Commercial & transactional keyword clustering",
+      "Competitor content gap & SERP analysis",
+      "Click-through rate (CTR) optimized titles & meta descriptions",
+      "Heading architecture & content readability optimization",
+      "Strategic internal linking structure",
+    ],
+    tools: ["Semrush", "Google Search Console", "GA4"],
+  },
+  {
+    id: "multi-region-local",
+    icon: "globe",
+    badge: "Global & Local",
+    title: "Multi-Region & Local SEO",
+    tagline: "Dominate search results in specific regions, cities, and international markets.",
+    description:
+      "Hands-on experience managing SEO for live websites across India and the US/Canada markets. I configure geo-targeting, regional keyword variants, and local search presence.",
+    deliverables: [
+      "International geo-targeting & hreflang configuration",
+      "Region-specific keyword & competitor analysis",
+      "Google Business Profile setup, audit & local ranking",
+      "Local citation consistency & review signals",
+      "Localized landing page content strategy",
+    ],
+    tools: ["Google Business Profile", "Semrush", "GA4"],
+  },
+  {
+    id: "seo-web-dev",
+    icon: "code",
+    badge: "Engineering + Search",
+    title: "SEO-First Web Development",
+    tagline: "Web applications built from day one to be lightning fast and search-ready.",
+    description:
+      "Unlike pure marketers, I write code. I build clean, modern web applications using Next.js and TypeScript that pass Core Web Vitals with flying colors, ship with dynamic metadata, and render seamlessly for crawlers.",
+    deliverables: [
+      "Next.js App Router & Server-Side Rendering (SSR)",
+      "Dynamic OpenGraph previews & social cards",
+      "Automated sitemap.xml & robots.txt pipelines",
+      "Programmatic SEO architecture for scalable page generation",
+      "Clean semantic HTML & accessibility (WCAG) compliance",
+    ],
+    tools: ["Next.js", "TypeScript", "Tailwind CSS", "React"],
+  },
 ] as const;
 
 export const EXPERIENCE = {

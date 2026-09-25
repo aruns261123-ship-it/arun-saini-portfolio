@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { NAV_ITEMS, CONTACT } from "@/lib/data";
-import { CloseIcon, LinkedInIcon, GitHubIcon, MailIcon, MenuIcon } from "./icons";
+import { CloseIcon, LinkedInIcon, GitHubIcon, MailIcon, MenuIcon, DownloadIcon } from "./icons";
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -137,6 +137,17 @@ export function Navbar() {
 
         <div className="flex items-center gap-2.5">
           <a
+            href="/resume.pdf"
+            download="Arun_Saini_Resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Download Arun Saini's Resume (PDF)"
+            className="hidden items-center gap-1.5 rounded-full border border-line bg-white/[0.03] px-4 py-2 text-[13px] font-semibold text-ink transition-all duration-300 hover:-translate-y-0.5 hover:border-accent/60 hover:text-accent-soft md:inline-flex"
+          >
+            <DownloadIcon className="h-3.5 w-3.5 text-accent-soft" />
+            Resume
+          </a>
+          <a
             href="#contact"
             className="hidden rounded-full bg-ink px-5 py-2.5 text-[13.5px] font-semibold text-base-950 shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:bg-white hover:shadow-lift sm:inline-flex"
           >
@@ -191,15 +202,28 @@ export function Navbar() {
               </li>
             ))}
           </ul>
-          <div className="mt-3 flex items-center justify-between border-t border-line pt-4">
-            <a
-              href="#contact"
-              onClick={() => setOpen(false)}
-              tabIndex={open ? 0 : -1}
-              className="inline-flex items-center rounded-full bg-ink px-5 py-2.5 text-sm font-semibold text-base-950"
-            >
-              Let&apos;s Talk
-            </a>
+          <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-line pt-4">
+            <div className="flex items-center gap-2">
+              <a
+                href="#contact"
+                onClick={() => setOpen(false)}
+                tabIndex={open ? 0 : -1}
+                className="inline-flex items-center rounded-full bg-ink px-4 py-2 text-xs font-semibold text-base-950"
+              >
+                Let&apos;s Talk
+              </a>
+              <a
+                href="/resume.pdf"
+                download="Arun_Saini_Resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                tabIndex={open ? 0 : -1}
+                className="inline-flex items-center gap-1.5 rounded-full border border-line bg-white/[0.04] px-3.5 py-2 text-xs font-semibold text-ink"
+              >
+                <DownloadIcon className="h-3.5 w-3.5 text-accent-soft" />
+                Resume
+              </a>
+            </div>
             <div className="flex items-center gap-1.5 text-ink-muted">
               <a
                 href={CONTACT.linkedin}

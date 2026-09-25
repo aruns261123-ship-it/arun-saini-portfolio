@@ -8,6 +8,7 @@ import {
   SearchIcon,
   CodeIcon,
   CheckIcon,
+  DownloadIcon,
 } from "./icons";
 
 function DashboardVisual() {
@@ -181,6 +182,17 @@ export function Hero() {
               className="inline-flex items-center gap-2 rounded-full border border-line-strong bg-white/[0.03] px-6 py-3 text-sm font-semibold text-ink transition-all duration-300 hover:-translate-y-0.5 hover:border-accent/60 hover:bg-accent/10"
             >
               Let&apos;s Connect
+            </a>
+            <a
+              href="/resume.pdf"
+              download="Arun_Saini_Resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-full border border-line-strong bg-white/[0.03] px-6 py-3 text-sm font-semibold text-ink transition-all duration-300 hover:-translate-y-0.5 hover:border-accent/60 hover:bg-accent/10 hover:text-accent-soft"
+              aria-label="Download Arun Saini's Resume (PDF)"
+            >
+              <DownloadIcon className="h-4 w-4 text-accent-soft" />
+              Download CV
             </a>
           </div>
 
